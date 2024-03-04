@@ -243,9 +243,13 @@ for i in  important_features:
     WP_df["vCount_MoreImpFeat"] = WP_df["vCount_MoreImpFeat"]+ WP_df[i].str.contains('N', regex=False).astype(int)
 for i in  unimportant_featues:
     WP_df["vCount_LessImpFeat"] = WP_df["vCount_LessImpFeat"]+ WP_df[i].str.contains('N', regex=False).astype(int)
+
 print(WP_df)
-Implication = pd.read_csv('Other/GC5_Implication.csv', sep=',')
-WP_df["DeepInfer_Implication"] = Implication
+WP_df["DeepInfer_Implication"] = WP_df.apply(lambda x: "Correct" if (x['vCount_MoreImpFeat'] == 0) else "Uncertain", axis=1)
+WP_df["DeepInfer_Implication"] = WP_df.apply(lambda x: "Wrong" if (x['vCount_LessImpFeat'] > violationMean and x['vCount_MoreImpFeat'] < violationMean and x['vCount_LessImpFeat'] != x['vCount_MoreImpFeat']) else "Correct", axis=1)
+WP_df["DeepInfer_Implication"] = WP_df.apply(lambda x: "Uncertain" if (x['vCount_LessImpFeat'] == x['vCount_MoreImpFeat'] and x['vCount_MoreImpFeat'] != 0) else x["DeepInfer_Implication"], axis=1)
+WP_df["DeepInfer_Implication"].to_csv("../Table3/Other/GC5_Implication.csv", sep=',', index=False)
+
 #Appending ActualOutcome Column
 print(ActualOutcome)
 WP_df['Actual_Outcome'] = ActualOutcome

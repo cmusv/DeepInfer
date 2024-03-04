@@ -256,7 +256,7 @@ print(WP_df)
 WP_df["DeepInfer_Implication"] = WP_df.apply(lambda x: "Correct" if (x['vCount_MoreImpFeat'] == 0) else "Uncertain", axis=1)
 WP_df["DeepInfer_Implication"] = WP_df.apply(lambda x: "Wrong" if (x['vCount_LessImpFeat'] > violationMean and x['vCount_MoreImpFeat'] < violationMean and x['vCount_LessImpFeat'] != x['vCount_MoreImpFeat']) else "Correct", axis=1)
 WP_df["DeepInfer_Implication"] = WP_df.apply(lambda x: "Uncertain" if (x['vCount_LessImpFeat'] == x['vCount_MoreImpFeat'] and x['vCount_MoreImpFeat'] != 0) else x["DeepInfer_Implication"], axis=1)
-
+WP_df["DeepInfer_Implication"].to_csv("../Table3/Other/PD1_Implication.csv", sep=',', index=False)
 print(ActualOutcome)
 WP_df['Actual_Outcome'] = ActualOutcome
 print(WP_df)

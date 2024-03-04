@@ -263,8 +263,9 @@ for i in  unimportant_featues:
 
 print(WP_df)
 WP_df["DeepInfer_Implication"] = WP_df.apply(lambda x: "Correct" if (x['vCount_MoreImpFeat'] == 0) else "Uncertain", axis=1)
-WP_df["DeepInfer_Implication"] = WP_df.apply(lambda x: "Wrong" if (x['vCount_LessImpFeat'] > violationMean and x['vCount_LessImpFeat'] != x['vCount_MoreImpFeat']) else "Correct", axis=1)
+WP_df["DeepInfer_Implication"] = WP_df.apply(lambda x: "Wrong" if (x['vCount_LessImpFeat'] > violationMean and x['vCount_MoreImpFeat'] < violationMean and x['vCount_LessImpFeat'] != x['vCount_MoreImpFeat']) else "Correct", axis=1)
 WP_df["DeepInfer_Implication"] = WP_df.apply(lambda x: "Uncertain" if (x['vCount_LessImpFeat'] == x['vCount_MoreImpFeat'] and x['vCount_MoreImpFeat'] != 0) else x["DeepInfer_Implication"], axis=1)
+WP_df["DeepInfer_Implication"].to_csv("../Table3/Other/BM8_Implication.csv", sep=',', index=False)
 
 #Appending ActualOutcome Column
 print(ActualOutcome)
@@ -283,6 +284,7 @@ Total_GT_Wrong = WP_df["GroundTruth"].str.contains('Wrong', regex=False).sum().a
 Total_DeepInfer_Implication_Correct = WP_df["DeepInfer_Implication"].str.contains('Correct', regex=False).sum().astype(int)
 Total_DeepInfer_Implication_Wrong = WP_df["DeepInfer_Implication"].str.contains('Wrong', regex=False).sum().astype(int)
 Total_DeepInfer_Implication_Uncertain = WP_df["DeepInfer_Implication"].str.contains('Uncertain', regex=False).sum().astype(int)
+WP_df["DeepInfer_Implication"].to_csv("../Table3/Other/BM8_Implication.csv", sep=',', index=False)
 
 print("Total_GroundTruth_Correct:",Total_GT_Correct)
 print("Total_GroundTruth_Incorrect:",Total_GT_Wrong)
